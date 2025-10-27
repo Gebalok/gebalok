@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace EchoServer
 {
+    //TODO: cover by unit tests
     public class EchoServer
     {
         private readonly int _port;
