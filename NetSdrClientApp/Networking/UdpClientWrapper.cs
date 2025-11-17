@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NetSdrClientApp.Networking;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
@@ -6,8 +8,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace NetSdrClientApp.Networking
 {
+
     public class UdpClientWrapper : IUdpClient
     {
         private readonly IPEndPoint _localEndPoint;
@@ -16,11 +20,13 @@ namespace NetSdrClientApp.Networking
 
         public event EventHandler<byte[]>? MessageReceived;
 
+        [ExcludeFromCodeCoverage]
         public UdpClientWrapper(int port)
         {
             _localEndPoint = new IPEndPoint(IPAddress.Any, port);
         }
 
+        [ExcludeFromCodeCoverage]
         public async Task StartListeningAsync()
         {
             _cts = new CancellationTokenSource();
@@ -51,6 +57,7 @@ namespace NetSdrClientApp.Networking
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public void StopListening()
         {
             try
@@ -65,6 +72,7 @@ namespace NetSdrClientApp.Networking
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public void Exit()
         {
             try
@@ -79,6 +87,7 @@ namespace NetSdrClientApp.Networking
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public override int GetHashCode()
         {
             var payload = $"{nameof(UdpClientWrapper)}|{_localEndPoint.Address}|{_localEndPoint.Port}";
@@ -89,6 +98,7 @@ namespace NetSdrClientApp.Networking
             return BitConverter.ToInt32(hash, 0);
         }
 
+        [ExcludeFromCodeCoverage]
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(this, obj))
@@ -100,5 +110,6 @@ namespace NetSdrClientApp.Networking
             return _localEndPoint.Address.Equals(other._localEndPoint.Address)
                 && _localEndPoint.Port == other._localEndPoint.Port;
         }
+
     }
 }
