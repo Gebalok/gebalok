@@ -6,6 +6,7 @@
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Gebalok_gebalok&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Gebalok_gebalok)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Gebalok_gebalok&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Gebalok_gebalok)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Gebalok_gebalok&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Gebalok_gebalok)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Gebalok_gebalok&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Gebalok_gebalok)
 
 Цей репозиторій використовується для курсу **реінжиніринг ПЗ**. 
 Мета — провести комплексний реінжиніринг спадкового коду NetSdrClient, включаючи рефакторинг архітектури, покращення якості коду, впровадження сучасних практик розробки та автоматизацію процесів контролю якості через CI/CD пайплайни.
