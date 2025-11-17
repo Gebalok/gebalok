@@ -12,7 +12,7 @@ namespace NetSdrClientApp.Networking
 {
     public class TcpClientWrapper : ITcpClient
     {
-        private string _host;
+        private readonly string _host;
         private int _port;
         private TcpClient? _tcpClient;
         private NetworkStream? _stream;
@@ -49,6 +49,7 @@ namespace NetSdrClientApp.Networking
             catch (Exception ex)
             {
                 Console.WriteLine($"Failed to connect: {ex.Message}");
+                _cts?.Dispose();
             }
         }
 
