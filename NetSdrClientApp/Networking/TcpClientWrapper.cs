@@ -19,7 +19,8 @@ namespace NetSdrClientApp.Networking
         private NetworkStream? _stream;
         private CancellationTokenSource _cts;
 
-        public bool Connected => _tcpClient != null && _tcpClient.Connected && _stream != null;
+        // Consider connection established if we have an active stream that can read/write
+        public bool Connected => _stream != null && (_stream.CanRead || _stream.CanWrite);
 
         public event EventHandler<byte[]>? MessageReceived;
 
@@ -29,7 +30,6 @@ namespace NetSdrClientApp.Networking
             _port = port;
         }
 
-        [ExcludeFromCodeCoverage]
         public void Connect()
         {
             if (Connected)
@@ -51,14 +51,10 @@ namespace NetSdrClientApp.Networking
             catch (Exception ex)
             {
                 Console.WriteLine($"Failed to connect: {ex.Message}");
-            }
-            finally
-            {
                 _cts?.Dispose();
             }
         }
 
-        [ExcludeFromCodeCoverage]
         public void Disconnect()
         {
             if (Connected)
@@ -78,12 +74,11 @@ namespace NetSdrClientApp.Networking
             }
         }
 
-        [ExcludeFromCodeCoverage]
-        public async Task SendMessageAsync(byte[] data)
+        private async Task SendInternalAsync(byte[] data)
         {
             if (Connected && _stream != null && _stream.CanWrite)
             {
-                Console.WriteLine($"Message sent: " + data.Select(b => Convert.ToString(b, toBase: 16)).Aggregate((l, r) => $"{l} {r}"));
+                Console.WriteLine($"Message sent: " + string.Join(" ", data.Select(b => b.ToString("X2"))));
                 await _stream.WriteAsync(data, 0, data.Length);
             }
             else
@@ -92,22 +87,15 @@ namespace NetSdrClientApp.Networking
             }
         }
 
-        [ExcludeFromCodeCoverage]
-        public async Task SendMessageAsync(string str)
+        public Task SendMessageAsync(byte[] data) => SendInternalAsync(data);
+
+        public Task SendMessageAsync(string str)
         {
             var data = Encoding.UTF8.GetBytes(str);
-            if (Connected && _stream != null && _stream.CanWrite)
-            {
-                Console.WriteLine($"Message sent: " + data.Select(b => Convert.ToString(b, toBase: 16)).Aggregate((l, r) => $"{l} {r}"));
-                await _stream.WriteAsync(data, 0, data.Length);
-            }
-            else
-            {
-                throw new InvalidOperationException("Not connected to a server.");
-            }
+            return SendInternalAsync(data);
         }
 
-        [ExcludeFromCodeCoverage]
+
         private async Task StartListeningAsync()
         {
             if (Connected && _stream != null && _stream.CanRead)

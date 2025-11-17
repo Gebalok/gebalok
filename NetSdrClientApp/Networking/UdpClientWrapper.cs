@@ -20,13 +20,11 @@ namespace NetSdrClientApp.Networking
 
         public event EventHandler<byte[]>? MessageReceived;
 
-        [ExcludeFromCodeCoverage]
         public UdpClientWrapper(int port)
         {
             _localEndPoint = new IPEndPoint(IPAddress.Any, port);
         }
 
-        [ExcludeFromCodeCoverage]
         public async Task StartListeningAsync()
         {
             _cts = new CancellationTokenSource();
@@ -57,8 +55,7 @@ namespace NetSdrClientApp.Networking
             }
         }
 
-        [ExcludeFromCodeCoverage]
-        public void StopListening()
+        private void StopListeningInternal()
         {
             try
             {
@@ -72,22 +69,10 @@ namespace NetSdrClientApp.Networking
             }
         }
 
-        [ExcludeFromCodeCoverage]
-        public void Exit()
-        {
-            try
-            {
-                _cts?.Cancel();
-                _udpClient?.Close();
-                Console.WriteLine("Stopped listening for UDP messages.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error while stopping: {ex.Message}");
-            }
-        }
+        public void StopListening() => StopListeningInternal();
 
-        [ExcludeFromCodeCoverage]
+        public void Exit() => StopListeningInternal();
+
         public override int GetHashCode()
         {
             var payload = $"{nameof(UdpClientWrapper)}|{_localEndPoint.Address}|{_localEndPoint.Port}";
@@ -98,7 +83,6 @@ namespace NetSdrClientApp.Networking
             return BitConverter.ToInt32(hash, 0);
         }
 
-        [ExcludeFromCodeCoverage]
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(this, obj))
