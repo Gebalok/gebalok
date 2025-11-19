@@ -31,6 +31,7 @@ namespace TestServerApp
             _clientFactory = clientFactory;
         }
 
+
         public async Task StartAsync()
         {
             _cancellationTokenSource = new CancellationTokenSource();
@@ -72,7 +73,11 @@ namespace TestServerApp
                         Console.WriteLine($"Echoed {bytesRead} bytes to the client.");
                     }
                 }
-                catch (Exception ex) when (!(ex is OperationCanceledException))
+                catch (OperationCanceledException)
+                {
+                    // Graceful cancellation: do not treat as error
+                }
+                catch (Exception ex)
                 {
                     Console.WriteLine($"Error: {ex.Message}");
                 }
