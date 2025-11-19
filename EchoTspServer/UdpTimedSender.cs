@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -34,9 +34,8 @@ namespace TestServerApp
         {
             try
             {
-                Random rnd = new Random();
                 byte[] samples = new byte[1024];
-                rnd.NextBytes(samples);
+                Random.Shared.NextBytes(samples);
                 _sequenceNumber++;
 
                 byte[] msg = (new byte[] { 0x04, 0x84 })
